@@ -80,7 +80,7 @@ require("lazy").setup({
         lualine_b = { "branch" },
         lualine_c = {
           { "diagnostics" },
-          { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+          { "filetype", icon_only = false, separator = "", padding = { left = 1, right = 0 } },
           { "filename", path = 1, symbols = { modified = "  ", readonly = "", unnamed = "" } },
         },
 
@@ -135,7 +135,16 @@ require("lazy").setup({
     opts = {},
   },
 
-  -- LSP and Auto Complete Chaos
+  -- Diagnostics
+  {
+    'folke/trouble.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    keys = {
+      { "<leader>xx", "<cmd>TroubleToggle<cr>", desc = "Toggle Trouble" },
+    },
+    opts = {},
+  },
+
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v3.x',
@@ -147,59 +156,42 @@ require("lazy").setup({
       vim.g.lsp_zero_extend_lspconfig = 0
     end,
   },
-
-  -- Autocompletion
-  {
-    'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
-    dependencies = {
-      { 'onsails/lspkind.nvim' },
-      { 'L3MON4D3/LuaSnip' },
-    },
-    config = function()
-      local lsp_zero = require('lsp-zero')
-      lsp_zero.extend_cmp()
-
-      local cmp = require('cmp')
-      local cmp_action = lsp_zero.cmp_action()
-
-      local nwd = require('nvim-web-devicons')
-
-      cmp.setup({
-        formatting = {
-          format = function(entry, vim_item)
-            if vim.tbl_contains({ 'path' }, entry.source.name) then
-              local icon, hl_group = nwd.get_icon(entry:get_completion_item().label)
-              if icon then
-                vim_item.kind = icon
-                vim_item.kind_hl_group = hl_group
-                return vim_item
-              end
-            end
-            return require('lspkind').cmp_format({ with_text = false })(entry, vim_item)
-          end
-        },
-        window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
-        },
-        mapping = cmp.mapping.preset.insert({
-          ['<CR>'] = cmp.mapping.confirm({ select = false }),
-
-          ['<Tab>'] = cmp_action.luasnip_supertab(),
-          ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
-        })
-      })
-    end
-  },
-
-  -- LSP
   {
     'williamboman/mason.nvim',
     lazy = false,
     config = true,
   },
 
+  -- Autocompletion
+  {
+    'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
+    dependencies = {
+      {'L3MON4D3/LuaSnip'},
+    },
+    config = function()
+      -- Here is where you configure the autocompletion settings.
+      local lsp_zero = require('lsp-zero')
+      lsp_zero.extend_cmp()
+
+      -- And you can configure cmp even more, if you want to.
+      local cmp = require('cmp')
+      local cmp_action = lsp_zero.cmp_action()
+
+      cmp.setup({
+        formatting = lsp_zero.cmp_format(),
+        mapping = cmp.mapping.preset.insert({
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-d>'] = cmp.mapping.scroll_docs(4),
+          ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+          ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+        })
+      })
+    end
+  },
+
+  -- LSP
   {
     'neovim/nvim-lspconfig',
     cmd = {'LspInfo', 'LspInstall', 'LspStart'},
@@ -231,13 +223,13 @@ require("lazy").setup({
             local lua_opts = lsp_zero.nvim_lua_ls()
             require('lspconfig').lua_ls.setup(lua_opts)
           end,
-        },
+        }
       })
     end
-  }
-
+  },
 }, {
   install = {
+    colorscheme = { 'github_dark_dimmed' },
   },
   ui = {
     border = "rounded",
