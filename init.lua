@@ -103,7 +103,26 @@ require("lazy").setup({
   {
     'stevearc/oil.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    opts = {},
+    opts = {
+      view_options = {
+        show_hidden = true,
+        is_hidden_file = function (name, _)
+          local visibleHidden = {
+            '.env',
+            '.github',
+            '.gitignore',
+            '.helmignore',
+            '.makerc',
+            '.tool-versions',
+          }
+          for _, v in ipairs(visibleHidden) do
+            if (name == v) then return false end
+          end
+
+          return vim.startswith(name, ".")
+        end,
+      },
+    },
     keys = {
       { "-", "<CMD>Oil<CR>", { desc = "Open parent directory" } },
     },
@@ -191,6 +210,11 @@ require("lazy").setup({
     end
   },
 
+  {
+    'rcarriga/nvim-notify',
+    opts = {},
+  },
+
   -- LSP
   {
     'neovim/nvim-lspconfig',
@@ -226,6 +250,22 @@ require("lazy").setup({
         }
       })
     end
+  },
+
+  -- Notify
+  {
+    'rcarriga/nvim-notify',
+    opts = {},
+  },
+
+  {
+    'mrded/nvim-lsp-notify',
+    requires = { 'rcarriga/nvim-notify' },
+    config = function ()
+      require('lsp-notify').setup({
+        notify = require('notify')
+      })
+    end,
   },
 }, {
   install = {
