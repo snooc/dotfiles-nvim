@@ -55,17 +55,24 @@ vim.cmd([[
 require("lazy").setup({
   -- GitHub Dark Color Scheme
   {
-    'projekt0n/github-nvim-theme',
+    'marko-cerovac/material.nvim',
     lazy = false,
     priority = 1000,
     config = function()
-      require('github-theme').setup({
-        options = {
-          -- transparent = true,
+      require('material').setup({
+        high_visibility = {
+          darker = true,
         },
+        plugins = {
+          'gitsigns',
+          'nvim-web-devicons',
+          'nvim-notify',
+          'telescope',
+        }
       })
 
-      vim.cmd('colorscheme github_dark_dimmed')
+      vim.g.material_style = 'palenight'
+      vim.cmd('colorscheme material')
     end,
   },
 
@@ -177,6 +184,11 @@ require("lazy").setup({
   },
   {
     'williamboman/mason.nvim',
+    opts = {
+      ui = {
+        border = 'rounded'
+      },
+    },
     lazy = false,
     config = true,
   },
@@ -212,7 +224,9 @@ require("lazy").setup({
 
   {
     'rcarriga/nvim-notify',
-    opts = {},
+    opts = {
+      background_colour = '#000000',
+    },
   },
 
   -- LSP
@@ -252,18 +266,34 @@ require("lazy").setup({
     end
   },
 
-  -- Notify
-  {
-    'rcarriga/nvim-notify',
-    opts = {},
-  },
-
   {
     'mrded/nvim-lsp-notify',
     requires = { 'rcarriga/nvim-notify' },
     config = function ()
       require('lsp-notify').setup({
         notify = require('notify')
+      })
+    end,
+  },
+
+  -- Treesitter
+  {
+    'nvim-treesitter/nvim-treesitter',
+    version = false,
+    build = ':TSUpdate',
+    opts = {
+    },
+    config = function ()
+      require('nvim-treesitter.configs').setup({
+        ensure_installed = {
+          'go',
+          'javascript',
+          'json',
+          'lua',
+          'typescript',
+          'yaml',
+          'vimdoc',
+        },
       })
     end,
   },
