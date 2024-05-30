@@ -34,7 +34,7 @@ return {
         max_height = 80,
       },
       view_options = {
-        show_hidden = true,
+        show_hidden = false,
         is_hidden_file = function (name, _)
           local visibleHidden = {
             '.env',
@@ -89,10 +89,4 @@ return {
     },
     config = true
   },
-
-  {
-    "lewis6991/gitsigns.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    opts = {},
-  }
 }
