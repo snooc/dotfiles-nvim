@@ -59,6 +59,10 @@ return {
   },
 
   {
+    'AndreM222/copilot-lualine'
+  },
+
+  {
     'nvim-lualine/lualine.nvim',
     dependencies = {
       'nvim-tree/nvim-web-devicons'
@@ -79,6 +83,7 @@ return {
           { "diff", symbols = { added = " ", modified = " ", removed = " " } },
         },
         lualine_y = {
+          { "copilot" },
           { "progress", separator = " ", padding = { left = 1, right = 0 } },
           { "location", padding = { left = 0, right = 1 } },
         },
