@@ -14,7 +14,8 @@ if not vim.loop.fs_stat(mini_path) then
   vim.cmd("packadd mini.nvim | helptags ALL")
   vim.cmd('echo "Installed `mini.nvim`" | redraw')
 end
-require("mini.deps").setup({ path = { package = path_package } })
+local MiniDeps = require("mini.deps")
+MiniDeps.setup({ path = { package = path_package } })
 
 -- mini.deps Helpers
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
@@ -26,7 +27,8 @@ end)
 
 now(function()
   add("echasnovski/mini.notify")
-  require("mini.notify").setup({
+  local MiniNotify = require("mini.notify")
+  MiniNotify.setup({
     window = {
       config = {
         border = "double",
@@ -69,7 +71,8 @@ end)
 -- Files
 later(function()
   add("echasnovski/mini.files")
-  require("mini.files").setup({})
+  local MiniFiles = require("mini.files")
+  MiniFiles.setup({})
 
   vim.api.nvim_create_autocmd("User", {
     pattern = "MiniFilesWindowOpen",
@@ -97,7 +100,8 @@ later(function()
 end)
 
 later(function()
-  require("mini.pick").setup({
+  local MiniPick = require("mini.pick")
+  MiniPick.setup({
     window = {
       config = {
         border = "double",
@@ -161,13 +165,18 @@ later(function()
 end)
 
 -- LSP/Lint/Format
-later(function()
+now(function()
   add("williamboman/mason.nvim")
   require("mason").setup({
     ui = {
       border = "double",
     },
   })
+end)
+
+now(function()
+  add("neovim/nvim-lspconfig")
+  require("lsp")
 end)
 
 later(function()
@@ -177,36 +186,10 @@ later(function()
     monitor = "main",
     hooks = { post_checkout = function() vim.cmd("TSUpdate") end },
   })
-  require("nvim-treesitter.configs").setup({
-    ensure_installed = {
-      "lua",
-      "vimdoc",
-    },
-    highlight = {
-      enable = true,
-    },
-  })
-end)
-
-later(function()
-  add("neovim/nvim-lspconfig")
-  require("lsp")
+  require("treesitter")
 end)
 
 later(function()
   add("stevearc/conform.nvim")
-  require("conform").setup({
-    formatters_by_ft = {
-      lua = { "stylua" },
-      go = { "goimports", "gofmt" },
-      javascript = { { "prettierd", "prettier" } },
-      python = { { "isort", "black" } },
-      ["*"] = { "codespell" },
-      ["_"] = { "trim_whitespace" },
-    },
-    format_on_save = {
-      lsp_fallback = true,
-      timeout_ms = 500,
-    },
-  })
+  require("formatting")
 end)
