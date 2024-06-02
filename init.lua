@@ -97,7 +97,16 @@ later(function()
 end)
 
 later(function()
-  require("mini.pick").setup({ window = { config = { border = "double" } } })
+  require("mini.pick").setup({
+    window = {
+      config = {
+        border = "double",
+      },
+    },
+    options = {
+      content_from_bottom = true,
+    },
+  })
   vim.ui.select = MiniPick.ui_select
   vim.keymap.set("n", ",", [[<Cmd>Pick buf_lines scope='current'<CR>]], { nowait = true })
 end)
@@ -146,6 +155,11 @@ later(function()
   require("mini.cursorword").setup({})
 end)
 
+later(function()
+  add("echasnovski/mini.trailspace")
+  require("mini.trailspace").setup({})
+end)
+
 -- LSP/Lint/Format
 later(function()
   add("williamboman/mason.nvim")
@@ -154,6 +168,29 @@ later(function()
       border = "double",
     },
   })
+end)
+
+later(function()
+  add({
+    source = "nvim-treesitter/nvim-treesitter",
+    checkout = "master",
+    monitor = "main",
+    hooks = { post_checkout = function() vim.cmd("TSUpdate") end },
+  })
+  require("nvim-treesitter.configs").setup({
+    ensure_installed = {
+      "lua",
+      "vimdoc",
+    },
+    highlight = {
+      enable = true,
+    },
+  })
+end)
+
+later(function()
+  add("neovim/nvim-lspconfig")
+  require("lsp")
 end)
 
 later(function()
