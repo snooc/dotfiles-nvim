@@ -33,3 +33,6 @@ lspconfig.lua_ls.setup({
     Lua = {},
   },
 })
+
+-- Go
+require("lspconfig").gopls.setup({})

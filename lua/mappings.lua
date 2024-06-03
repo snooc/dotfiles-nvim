@@ -15,3 +15,7 @@ nmap_leader("fgb", "<CMD>Pick git_commits<CR>", "Git Commits")
 nmap_leader("fgh", "<CMD>Pick git_hunks<CR>", "Git Hunks")
 nmap_leader("fgf", "<CMD>Pick git_files<CR>", "Git Files")
 nmap_leader("fd", "<CMD>Pick diagnostic<CR>", "Diagnostics")
+
+-- Copilot
+nmap_leader("cp", "<CMD>Copilot panel<CR>", "Copilot Panel")
+nmap_leader("cs", "<CMD>Copilot suggestion<CR>", "Copilot Suggestion")
