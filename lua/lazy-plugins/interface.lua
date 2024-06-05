@@ -88,6 +88,57 @@ return {
     opts = {},
     keys = {
       { "<leader>\\", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
+      {
+        "<leader>\\d",
+        function()
+          local Terminal = require("toggleterm.terminal").Terminal
+          local lazydocker = Terminal:new({
+            cmd = "lazydocker",
+            hidden = true,
+            direction = "float",
+            float_opts = {
+              border = "double",
+            },
+          })
+
+          lazydocker:toggle()
+        end,
+        desc = "Toggle lazydocker in Terminal",
+      },
+      {
+        "<leader>\\g",
+        function()
+          local Terminal = require("toggleterm.terminal").Terminal
+          local lazydocker = Terminal:new({
+            cmd = "lazygit",
+            hidden = true,
+            direction = "float",
+            float_opts = {
+              border = "double",
+            },
+          })
+
+          lazydocker:toggle()
+        end,
+        desc = "Toggle lazydocker in Terminal",
+      },
+      {
+        "<leader>\\k",
+        function()
+          local Terminal = require("toggleterm.terminal").Terminal
+          local lazydocker = Terminal:new({
+            cmd = "k9s",
+            hidden = true,
+            direction = "float",
+            float_opts = {
+              border = "double",
+            },
+          })
+
+          lazydocker:toggle()
+        end,
+        desc = "Toggle lazydocker in Terminal",
+      },
     },
   },
 
