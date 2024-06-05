@@ -11,7 +11,7 @@ function M.is_hidden_file(name)
   }
 
   for _, v in ipairs(visible_hidden) do
-    if (name == v) then return false end
+    if name == v then return false end
   end
 
   return vim.startswith(name, ".")
